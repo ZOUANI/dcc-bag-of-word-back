@@ -1,6 +1,8 @@
 package ma.zs.tfidf;
 
+import ma.zs.tfidf.bean.IgnoredWord;
 import ma.zs.tfidf.bean.Tag;
+import ma.zs.tfidf.service.IgnoredWordService;
 import ma.zs.tfidf.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,11 +22,47 @@ public class TfidfApplication implements CommandLineRunner {
 
     @Autowired
     private TagService tagService;
+    @Autowired
+    private IgnoredWordService ignoredWordService;
 
     private List<Tag> tags = new ArrayList<>();
+    private List<IgnoredWord> ignoredWords = new ArrayList<>();
 
     @Override
     public void run(String... args) throws Exception {
+//        Stream.of("the","of", "to", "and", "a", "in", "is", "it",
+//                "you", "that", "he" ,"was", "for", "on", "are" ,"with",
+//                "as", "I", "his", "they", "be", "at", "one", "have",
+//                "this", "from", "or", "had", "by", "but", "some", "what" ,
+//                "there" ,"we", "can", "out", "other" ,"were", "all",
+//                "your", "when" ,"up" ,"use" ,"word", "how" , "an", "each",
+//                "she", "which" ,"do", "their", "if", "will", "way", "about" ,
+//                "many", "then" ,"them", "would" , "like", "so", "these",
+//                "her" , "thing" , "him", "two", "has",  "more" , "could",
+//                "did", "my", "sound" ,"no", "most", "number", "who",
+//                "over", "know", "than" , "first" , "may" ,"down" , "been",
+//                "now",  "any", "new" , "get" , "made",  "where", "after",
+//                "back", "little" ,"only", "round" , "year",  "every", "good" ,
+//                "me" , "our", "under" , "very", "through", "just" ,"form",
+//                "much", "great" ,"think" ,  "before" , "cause", "same",
+//                "mean"  , "right" , "old", "too", "does", "tell" , "three",
+//                "want" , "well", "also" , "small", "end", "put", "home" ,
+//                "add", "even"  ,"here" ,"must", "big", "high", "such" ,
+//                "why", "kind" ,"off", "need", "house" ,"picture", "try", "us",
+//                "again" , "world", "near" , "self" , "own" , "should" , "found",
+//                "answer" , "thought", "let" ,"keep",  "never", "last" ,
+//                "between" , "since", "hard" ,"start" ,"might",  "left" ,"late" ,
+//                "don't", "while" ,"real", "life", "few", "stop" ,"open",
+//                "seem", "together", "next" ,"white" , "got" , "example" ,
+//                "often", "always" , "those", "both" , "until", "mile" ,
+//                "second", "group" , "once" , "sure",  "main", "enough" ,
+//                "usual" , "above", "ever" , "though"  ,"soon"  ,"half" ,
+//                "top", "whole" , "best" ,"better", "TRUE" ,"during" , "am" ,
+//                "less" ,"simple", "against" , "center" ,"certain", "yet", "yes"
+//        ).forEach(w->{
+//            ignoredWords.add(new IgnoredWord(null,w));
+//        });
+//        ignoredWordService.create(ignoredWords);
 //        Stream.of(
 //                "DOCTYPE",
 //                "a",

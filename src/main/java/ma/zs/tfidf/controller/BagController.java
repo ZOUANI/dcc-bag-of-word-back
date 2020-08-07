@@ -1,10 +1,12 @@
 package ma.zs.tfidf.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import ma.zs.tfidf.bean.Bag;
 import ma.zs.tfidf.dto.BagRequest;
+import ma.zs.tfidf.dto.Course;
 import ma.zs.tfidf.dto.SimilarityRequest;
 import ma.zs.tfidf.service.BagService;
 import ma.zs.tfidf.util.BagOfWordsUtil;
@@ -37,6 +39,18 @@ public class BagController {
         double similarity = BagOfWordsUtil.comapreBags(createdBag, bagOriginal);
         similarityRequest.setSimilarity(similarity);
         return similarityRequest;
+    }
+
+    @PostMapping("/getBag")
+    public int treat(@RequestBody List<Bag> bags){
+        System.out.println("haaaa bags => ");
+        System.out.println(bags);
+        return bags.size();
+    }
+
+    @PostMapping("/bagForCourse")
+    public Course makeBagsCourse(@RequestBody Course course) throws JsonProcessingException {
+        return bagService.makeBagsCourse(course);
     }
 
 

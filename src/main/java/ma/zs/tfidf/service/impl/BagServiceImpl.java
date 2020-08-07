@@ -1,11 +1,15 @@
 package ma.zs.tfidf.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ma.zs.tfidf.bean.Bag;
 import ma.zs.tfidf.bean.IgnoredWord;
 import ma.zs.tfidf.bean.Tag;
 import ma.zs.tfidf.dao.IgnoredWordDao;
 import ma.zs.tfidf.dao.TagDao;
 import ma.zs.tfidf.dto.BagRequest;
+import ma.zs.tfidf.dto.Chapter;
+import ma.zs.tfidf.dto.Course;
 import ma.zs.tfidf.service.BagService;
 import ma.zs.tfidf.util.BagOfWordsUtil;
 import ma.zs.tfidf.util.Util;
@@ -32,6 +36,23 @@ public class BagServiceImpl implements BagService {
                 bags.add(new Bag(s, BagOfWordsUtil.tf(res, s)));
         }
         return bags;
+    }
+
+    @Override
+    public Course makeBagsCourse(Course course) throws JsonProcessingException {
+
+        course.setBagOfWords(makeBagFromString(course.getCourseSummarySectionContent()));
+        for (Chapter chapter : course.getChapters()) {
+            chapter.setBagOfWords(makeBagFromString(chapter.getChapterContent()));
+        }
+        return course;
+    }
+
+    private String makeBagFromString(String s) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        BagRequest br = new BagRequest(s);
+        List<Bag> bags = makeBag(br);
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(bags);
     }
 
     private List<String> cleanText(String text) {
